@@ -1,0 +1,31 @@
+#ifndef _MODEL_HPP_
+#define _MODEL_HPP_
+
+#include "Vec2Float.hpp"
+#include "Color.hpp"
+#include "ColoredVertex.hpp"
+#include "PrimitiveType.hpp"
+#include "DebugData.hpp"
+#include "DebugCommand.hpp"
+#include "Vec2Int.hpp"
+#include "MoveAction.hpp"
+#include "EntityType.hpp"
+#include "BuildAction.hpp"
+#include "AutoAttack.hpp"
+#include "AttackAction.hpp"
+#include "RepairAction.hpp"
+#include "EntityAction.hpp"
+#include "Action.hpp"
+#include "ClientMessage.hpp"
+#include "BuildProperties.hpp"
+#include "AttackProperties.hpp"
+#include "RepairProperties.hpp"
+#include "EntityProperties.hpp"
+#include "Player.hpp"
+#include "Entity.hpp"
+#include "PlayerView.hpp"
+#include "ServerMessage.hpp"
+#include "Camera.hpp"
+#include "DebugState.hpp"
+
+#endif

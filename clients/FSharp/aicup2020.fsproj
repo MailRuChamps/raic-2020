@@ -1,0 +1,40 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Include="Model/Vec2Single.fs" />
+        <Compile Include="Model/Color.fs" />
+        <Compile Include="Model/ColoredVertex.fs" />
+        <Compile Include="Model/PrimitiveType.fs" />
+        <Compile Include="Model/DebugData.fs" />
+        <Compile Include="Model/DebugCommand.fs" />
+        <Compile Include="Model/Vec2Int.fs" />
+        <Compile Include="Model/MoveAction.fs" />
+        <Compile Include="Model/EntityType.fs" />
+        <Compile Include="Model/BuildAction.fs" />
+        <Compile Include="Model/AutoAttack.fs" />
+        <Compile Include="Model/AttackAction.fs" />
+        <Compile Include="Model/RepairAction.fs" />
+        <Compile Include="Model/EntityAction.fs" />
+        <Compile Include="Model/Action.fs" />
+        <Compile Include="Model/ClientMessage.fs" />
+        <Compile Include="Model/BuildProperties.fs" />
+        <Compile Include="Model/AttackProperties.fs" />
+        <Compile Include="Model/RepairProperties.fs" />
+        <Compile Include="Model/EntityProperties.fs" />
+        <Compile Include="Model/Player.fs" />
+        <Compile Include="Model/Entity.fs" />
+        <Compile Include="Model/PlayerView.fs" />
+        <Compile Include="Model/ServerMessage.fs" />
+        <Compile Include="Model/Camera.fs" />
+        <Compile Include="Model/DebugState.fs" />
+        <Compile Include="DebugInterface.fs" />
+        <Compile Include="MyStrategy.fs" />
+        <Compile Include="Runner.fs" />
+    </ItemGroup>
+
+</Project>
