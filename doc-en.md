@@ -68,6 +68,7 @@ The "crashed" strategy can no longer control player's behavior. The strategy is 
 - The strategy exceeded one of the time constraints assigned to it. There is a time limit for strategy to reply with an action for each tick, as well as a time limit for the whole game.
 
 - The strategy exceeded the memory limit.
+
 ## Game overview
 
 The game of CodeCraft 2020 is a strategy where you will have to control a number of units, gather resources, build your settlement and attack your enemies.
@@ -130,16 +131,231 @@ For move action target position needs to be specified. A unit will try to pathfi
 
 When pathfinding is needed to be performed by the game server, a simple A* algorithm is used, with limited number of nodes to be visited.
 
-Each game tick, first all active entities' actions are being performed sequentually in random order (the order is different each tick). Then, entities with zero health are removed from the game and entities with max health become active.
+Each game tick, first a random order is chosen for entities (the order is different each tick).
+Then, all attack actions are performed for active entities in this order.
+Next, build actions are performed in same order (if an entity has performed an attack action this tick, build action will not be performed).
+Then repair actions and move actions are performed in same way. When performing pathfinding for movement, game's state at the beginning of tick is used.
+In the end, entities with zero health are removed from the game, and entities with full health become active.
 
 ## Round specific rules
 
 In **Round 1** you are to learn the rules of the game. To simplify things, there will be no fog of war in this stage. Also, you will be given a base for each unit type in the beginning of the game, so you can start gathering resources and attacking your opponent right away. You can still experiment with buildings to prepare for next stages.
 
-In **Round 2** you have to learn building. You are only given a builder unit base. Also, fog of war will now be enabled so you will have to do some exploration before confronting the enemy. The task is further complicated
+In **Round 2** you have to learn building. In the beginning you will only have builders. You will need to build bases for other types of units. Also, fog of war will now be enabled so you will have to do some exploration before confronting the enemy. The task is further complicated
 that after summarizing the **Round 1**, the part of the weak strategies will be eliminated and you will have to confront stronger opponents.
 
 **Finals** is the most important stage. After the selection, held following the results of the first two stages, the strongest participants will be remained. The games in the finals are going to be 1v1, but otherwise no new rules are going to be introduced.
+## Entity properties values
+
+Here you can see the value of entity properties:
+
+```
+{
+    House: (
+        size: 3,
+        build_score: 50,
+        destroy_score: 500,
+        can_move: false,
+        population_provide: 5,
+        population_use: 0,
+        max_health: 50,
+        cost: 50,
+        sight_range: 5,
+        resource_per_health: 0,
+        build: None,
+        attack: None,
+        repair: None,
+    ),
+    RangedUnit: (
+        size: 1,
+        build_score: 30,
+        destroy_score: 300,
+        can_move: true,
+        population_provide: 0,
+        population_use: 1,
+        max_health: 10,
+        cost: 30,
+        sight_range: 10,
+        resource_per_health: 0,
+        build: None,
+        attack: Some((
+            range: 5,
+            damage: 5,
+            collect_resource: false,
+        )),
+        repair: None,
+    ),
+    BuilderUnit: (
+        size: 1,
+        build_score: 10,
+        destroy_score: 100,
+        can_move: true,
+        population_provide: 0,
+        population_use: 1,
+        max_health: 10,
+        cost: 10,
+        sight_range: 10,
+        resource_per_health: 0,
+        build: Some((
+            options: [
+                House,
+                Wall,
+                BuilderBase,
+                MeleeBase,
+                RangedBase,
+                Turret,
+            ],
+            init_health: Some(5),
+        )),
+        attack: Some((
+            range: 1,
+            damage: 1,
+            collect_resource: true,
+        )),
+        repair: Some((
+            valid_targets: [
+                House,
+                Wall,
+                BuilderBase,
+                MeleeBase,
+                RangedBase,
+                Turret,
+            ],
+            power: 5,
+        )),
+    ),
+    MeleeUnit: (
+        size: 1,
+        build_score: 20,
+        destroy_score: 200,
+        can_move: true,
+        population_provide: 0,
+        population_use: 1,
+        max_health: 50,
+        cost: 20,
+        sight_range: 10,
+        resource_per_health: 0,
+        build: None,
+        attack: Some((
+            range: 1,
+            damage: 5,
+            collect_resource: false,
+        )),
+        repair: None,
+    ),
+    Wall: (
+        size: 1,
+        build_score: 10,
+        destroy_score: 100,
+        can_move: false,
+        population_provide: 0,
+        population_use: 0,
+        max_health: 50,
+        cost: 10,
+        sight_range: 2,
+        resource_per_health: 0,
+        build: None,
+        attack: None,
+        repair: None,
+    ),
+    Resource: (
+        size: 1,
+        build_score: 0,
+        destroy_score: 0,
+        can_move: false,
+        population_provide: 0,
+        population_use: 0,
+        max_health: 30,
+        cost: 0,
+        sight_range: 0,
+        resource_per_health: 1,
+        build: None,
+        attack: None,
+        repair: None,
+    ),
+    Turret: (
+        size: 2,
+        build_score: 200,
+        destroy_score: 2000,
+        can_move: false,
+        population_provide: 0,
+        population_use: 0,
+        max_health: 100,
+        cost: 200,
+        sight_range: 10,
+        resource_per_health: 0,
+        build: None,
+        attack: Some((
+            range: 5,
+            damage: 5,
+            collect_resource: false,
+        )),
+        repair: None,
+    ),
+    BuilderBase: (
+        size: 5,
+        build_score: 500,
+        destroy_score: 5000,
+        can_move: false,
+        population_provide: 5,
+        population_use: 0,
+        max_health: 300,
+        cost: 500,
+        sight_range: 5,
+        resource_per_health: 0,
+        build: Some((
+            options: [
+                BuilderUnit,
+            ],
+            init_health: None,
+        )),
+        attack: None,
+        repair: None,
+    ),
+    RangedBase: (
+        size: 5,
+        build_score: 500,
+        destroy_score: 5000,
+        can_move: false,
+        population_provide: 5,
+        population_use: 0,
+        max_health: 300,
+        cost: 500,
+        sight_range: 5,
+        resource_per_health: 0,
+        build: Some((
+            options: [
+                RangedUnit,
+            ],
+            init_health: None,
+        )),
+        attack: None,
+        repair: None,
+    ),
+    MeleeBase: (
+        size: 5,
+        build_score: 500,
+        destroy_score: 5000,
+        can_move: false,
+        population_provide: 5,
+        population_use: 0,
+        max_health: 300,
+        cost: 500,
+        sight_range: 5,
+        resource_per_health: 0,
+        build: Some((
+            options: [
+                MeleeUnit,
+            ],
+            init_health: None,
+        )),
+        attack: None,
+        repair: None,
+    ),
+}
+
+```
+
 ## API description
 
 In language pack for your programming language you can find file named `MyStrategy.<ext>`/`my_strategy.<ext>`.
@@ -166,6 +382,7 @@ otherwise other methods may be used (like a nullable pointer type).
 Some objects may take one of several forms. The way it is implemented depends on the language.
 If possible, a dedicated sum (algebraic) data type is used,
 otherwise other methods may be used (like variants being classes inherited from abstract base class).
+
 ## `Vec2Float32`
 
 2 dimensional vector.

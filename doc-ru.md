@@ -77,6 +77,7 @@
 - Стратегия превысила одно из ограничений по времени. Существует ограничение на время ответа (выбора действия) на каждый тик, а также суммарное ограничение по времени на всю игру.
 
 - Стратегия превысила ограничение памяти.
+
 ## Описание игры
 
 Игра CodeCraft 2020 представляет собой стратегию, в которой вам предстоит управлять набором юнитов, собирать ресурсы, строить здания и атаковать противников.
@@ -139,15 +140,231 @@
 
 Когда игровой сервер производит поиск пути, используется простой алгоритм A* с ограничением на количество посещенных вершин.
 
-Каждый игровой тик, сперва все активные сущности выполняют свои действия последовательно в случайном порядке (порядок разный каждый тик). Затем, сущности с нулевым здоровьем удаляются из игры, а сущности с максимальным здоровьем становятся активными.
+Каждый игровой тик, сперва выбирается определенный случайный порядок сущностей (порядок разный каждый тик).
+Затем выполняются все действия атаки активных сущностей в данном порядке.
+Затем все действия постройки в данном порядке (если сущность выполнила действие атаки в этот тик, то действие постройки она уже выполнять не может).
+Затем действия ремонта и движения аналогично. Во время поиска пути для движения используется состояние мира в начале тика.
+Если после атаки сущность осталась без здоровья, она все равно будут пытаться выполнять действия этого тика.
+В конце, сущности с нулевым здоровьем удаляются из игры, а сущности с максимальным здоровьем становятся активными.
 
 ## Специфичные правила этапов
 
 В **Раунде 1** вам предстоит изучить правила игры. Для простоты, не будет тумана войны, а также вам будут даны базы для каждого типа юнитов в начале игры, так что вы сможете сразу начать добывать ресурсы и атаковать врагов. Тем не менее, вы можете экспериментировать с постройками для подготовки к следующим этапам.
 
-В **Раунде 2** вам уже необходимо освоить постройку. В начале вам будет дан лишь один юнит-строитель. Также, будет включен тума войны и будет необходимо исследовать местность перед атакой. Задача осложняется тем, что после **Раунда 1**, часть слабых участников будет отсеяна и вам придется сражаться с более сильными соперниками.
+В **Раунде 2** вам уже необходимо освоить постройку. В начале вам будут доступны лишь строители. Будет необходимо построить базы для других типов юнитов. Также, будет включен тума войны и будет необходимо исследовать местность перед атакой. Задача осложняется тем, что после **Раунда 1**, часть слабых участников будет отсеяна и вам придется сражаться с более сильными соперниками.
 
 **Финал** — самый важный этап. После первых двух раундов остаются только сильнейшие. Игры в финале будут 1 на 1, но кроме этого новых правил введено не будет.
+## Значения свойств сущностей
+
+Здесь вы можете ознакомиться с конкретными значениями свойств сущностей:
+
+```
+{
+    House: (
+        size: 3,
+        build_score: 50,
+        destroy_score: 500,
+        can_move: false,
+        population_provide: 5,
+        population_use: 0,
+        max_health: 50,
+        cost: 50,
+        sight_range: 5,
+        resource_per_health: 0,
+        build: None,
+        attack: None,
+        repair: None,
+    ),
+    RangedUnit: (
+        size: 1,
+        build_score: 30,
+        destroy_score: 300,
+        can_move: true,
+        population_provide: 0,
+        population_use: 1,
+        max_health: 10,
+        cost: 30,
+        sight_range: 10,
+        resource_per_health: 0,
+        build: None,
+        attack: Some((
+            range: 5,
+            damage: 5,
+            collect_resource: false,
+        )),
+        repair: None,
+    ),
+    BuilderUnit: (
+        size: 1,
+        build_score: 10,
+        destroy_score: 100,
+        can_move: true,
+        population_provide: 0,
+        population_use: 1,
+        max_health: 10,
+        cost: 10,
+        sight_range: 10,
+        resource_per_health: 0,
+        build: Some((
+            options: [
+                House,
+                Wall,
+                BuilderBase,
+                MeleeBase,
+                RangedBase,
+                Turret,
+            ],
+            init_health: Some(5),
+        )),
+        attack: Some((
+            range: 1,
+            damage: 1,
+            collect_resource: true,
+        )),
+        repair: Some((
+            valid_targets: [
+                House,
+                Wall,
+                BuilderBase,
+                MeleeBase,
+                RangedBase,
+                Turret,
+            ],
+            power: 5,
+        )),
+    ),
+    MeleeUnit: (
+        size: 1,
+        build_score: 20,
+        destroy_score: 200,
+        can_move: true,
+        population_provide: 0,
+        population_use: 1,
+        max_health: 50,
+        cost: 20,
+        sight_range: 10,
+        resource_per_health: 0,
+        build: None,
+        attack: Some((
+            range: 1,
+            damage: 5,
+            collect_resource: false,
+        )),
+        repair: None,
+    ),
+    Wall: (
+        size: 1,
+        build_score: 10,
+        destroy_score: 100,
+        can_move: false,
+        population_provide: 0,
+        population_use: 0,
+        max_health: 50,
+        cost: 10,
+        sight_range: 2,
+        resource_per_health: 0,
+        build: None,
+        attack: None,
+        repair: None,
+    ),
+    Resource: (
+        size: 1,
+        build_score: 0,
+        destroy_score: 0,
+        can_move: false,
+        population_provide: 0,
+        population_use: 0,
+        max_health: 30,
+        cost: 0,
+        sight_range: 0,
+        resource_per_health: 1,
+        build: None,
+        attack: None,
+        repair: None,
+    ),
+    Turret: (
+        size: 2,
+        build_score: 200,
+        destroy_score: 2000,
+        can_move: false,
+        population_provide: 0,
+        population_use: 0,
+        max_health: 100,
+        cost: 200,
+        sight_range: 10,
+        resource_per_health: 0,
+        build: None,
+        attack: Some((
+            range: 5,
+            damage: 5,
+            collect_resource: false,
+        )),
+        repair: None,
+    ),
+    BuilderBase: (
+        size: 5,
+        build_score: 500,
+        destroy_score: 5000,
+        can_move: false,
+        population_provide: 5,
+        population_use: 0,
+        max_health: 300,
+        cost: 500,
+        sight_range: 5,
+        resource_per_health: 0,
+        build: Some((
+            options: [
+                BuilderUnit,
+            ],
+            init_health: None,
+        )),
+        attack: None,
+        repair: None,
+    ),
+    RangedBase: (
+        size: 5,
+        build_score: 500,
+        destroy_score: 5000,
+        can_move: false,
+        population_provide: 5,
+        population_use: 0,
+        max_health: 300,
+        cost: 500,
+        sight_range: 5,
+        resource_per_health: 0,
+        build: Some((
+            options: [
+                RangedUnit,
+            ],
+            init_health: None,
+        )),
+        attack: None,
+        repair: None,
+    ),
+    MeleeBase: (
+        size: 5,
+        build_score: 500,
+        destroy_score: 5000,
+        can_move: false,
+        population_provide: 5,
+        population_use: 0,
+        max_health: 300,
+        cost: 500,
+        sight_range: 5,
+        resource_per_health: 0,
+        build: Some((
+            options: [
+                MeleeUnit,
+            ],
+            init_health: None,
+        )),
+        attack: None,
+        repair: None,
+    ),
+}
+
+```
+
 ## Описание API
 
 В пакете для вашего языка программирования вы можете найти файл `MyStrategy.<ext>`/`my_strategy.<ext>`.
@@ -174,6 +391,7 @@
 Некоторые объекты могут принимать несколько различных форм. Способ реализации зависит от языка.
 Если возможно, используется специальный (алгебраический) тип данных,
 иначе другие методы могут быть использованы (например варианты представлены классами унаследованными от абстрактного базового класса).
+
 ## `Vec2Float32`
 
 Двумерный вектор
