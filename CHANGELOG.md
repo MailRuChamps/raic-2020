@@ -2,6 +2,7 @@
 
 ## 0.2.0-beta
 
+- Stronger validation of incoming values
 - Add builder base to the starting state of Round 2 and Finals
 - Add entity properties values to rules
 - Some changes in entities' properties
