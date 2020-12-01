@@ -1,5 +1,5 @@
 use super::*;
-#[derive(Clone, Debug, trans::Trans)]
+#[derive(Clone, Debug, PartialEq, Eq, trans::Trans)]
 pub struct EntityAction {
     pub move_action: Option<MoveAction>,
     pub build_action: Option<BuildAction>,
