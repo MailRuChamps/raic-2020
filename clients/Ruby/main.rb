@@ -23,7 +23,7 @@ class SocketWrapper
         @socket.write(data)
     end
     def flush()
-        # TODO
+        @socket.flush
     end
 end
 
