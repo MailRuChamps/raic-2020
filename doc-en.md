@@ -73,6 +73,8 @@ The "crashed" strategy can no longer control player's behavior. The strategy is 
 
 The game of CodeCraft 2020 is a strategy where you will have to control a number of units, gather resources, build your settlement and attack your enemies.
 
+Your goal is to gain more score than your opponents. The game ends either when the max tick count has been reached or when there is only one (or zero) players left.
+
 The game is played on a rectangular grid, divided into tiles. All game entities have square shape and are located at some integer coordinates. When calculating distance, we count the number of tiles that need to be traversed to reach destination, going to a neighboring tile at one time.
 
 Entities' behavior is defined by their properties.

@@ -1,6 +1,5 @@
 # AI CUP 2020 - CodeCraft
 
-- [Changelog](CHANGELOG.md)
-- [Russian Docs](doc-ru.md)
-- [English Docs](doc-en.md)
+- [Changelog](CHANGELOG.md) | [Список изменений](CHANGELOG-ru.md)
+- [Documentation](doc-en.md) | [Документация](doc-ru.md)
 - [Clients (with Dockerfiles)](clients)

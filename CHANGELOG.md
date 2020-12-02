@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.2.2-beta
+
+- Tweak schematic visualization
+- Finish game if only one (or zero) players left
+- Add PyPy
+
 ## 0.2.0-beta
 
 - Stronger validation of incoming values

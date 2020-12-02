@@ -4,4 +4,4 @@ version = "0.1.0"
 edition = "2018"
 
 [dependencies]
-trans = "0.4.0-alpha.2"
+trans = "0.4.0-alpha.3"
