@@ -7,23 +7,28 @@ require_relative 'debug_interface'
 class SocketWrapper
     def initialize(socket)
         @socket = socket
+        @read_buffer = ''
+        @read_index = 0
     end
     def read_bytes(byte_count)
-        result = ''
-        while result.length < byte_count
-            chunk = @socket.recv(byte_count - result.length)
-            if chunk.length <= 0
-                raise "Can't read from socket"
-            end
-            result << chunk
-        end
-        result
+        data = if @read_buffer == '' || @read_index >= @read_buffer.size
+                   @read_buffer = @socket.recvfrom(999999).first.chomp
+                   @read_index = 0
+                   @read_buffer.byteslice(@read_index..(byte_count + @read_index))
+               else
+                   @read_buffer.byteslice(@read_index..(byte_count + @read_index))
+               end
+        @read_index += byte_count
+        data
     end
     def write_bytes(data)
         @socket.write(data)
+        @read_index = 0
+        @read_buffer = ''
     end
-    def flush()
-        # TODO
+    def flush
+        @read_index = 0
+        @read_buffer = ''
     end
 end
 
