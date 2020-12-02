@@ -1,4 +1,4 @@
-FROM ruby:2.7
+FROM jruby:9
 
 COPY . /project
 WORKDIR /project
