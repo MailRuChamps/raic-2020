@@ -392,7 +392,7 @@ Some objects may take one of several forms. The way it is implemented depends on
 If possible, a dedicated sum (algebraic) data type is used,
 otherwise other methods may be used (like variants being classes inherited from abstract base class).
 
-## `Vec2Float32`
+## `Vec2Float`
 
 2 dimensional vector.
 
@@ -418,8 +418,8 @@ Vertex for debug rendering
 
 Fields:
 
-- `world_pos`: `Option<Vec2Float32>` - Position in world coordinates (if none, screen position (0, 0) is used)
-- `screen_offset`: `Vec2Float32` - Additional offset in screen coordinates
+- `world_pos`: `Option<Vec2Float>` - Position in world coordinates (if none, screen position (0, 0) is used)
+- `screen_offset`: `Vec2Float` - Additional offset in screen coordinates
 - `color`: `Color` - Color to use
 
 ## `PrimitiveType`
@@ -703,7 +703,7 @@ Camera used for rendering
 
 Fields:
 
-- `center`: `Vec2Float32` - Center point at which camera is looking
+- `center`: `Vec2Float` - Center point at which camera is looking
 - `rotation`: `float32` - Rotation angle
 - `attack`: `float32` - Attack angle
 - `distance`: `float32` - Distance to center
@@ -716,8 +716,8 @@ Debug state to be received from the app
 Fields:
 
 - `window_size`: `Vec2Int32` - Size of the drawing canvas
-- `mouse_pos_window`: `Vec2Float32` - Mouse position in window coordinates
-- `mouse_pos_world`: `Vec2Float32` - Mouse position in world coordinates
+- `mouse_pos_window`: `Vec2Float` - Mouse position in window coordinates
+- `mouse_pos_world`: `Vec2Float` - Mouse position in world coordinates
 - `pressed_keys`: `[string]` - Currently pressed keys
 - `camera`: `Camera` - Current camera used for rendering
 - `player_index`: `int32` - Your player's index
