@@ -9,5 +9,5 @@ if [ "$1" != "base" ]; then
     fi
 fi
 
-ruby -c main.rb
+jruby -c main.rb
 cp -r * /output/
