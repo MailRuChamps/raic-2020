@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 0.3.0-beta
+
+- New movement mechanics
+- Dynamic building cost
+- Slower repairing
+- Changed Ruby interpreter to JRuby
+- Added numpy to PyPy
+
 ## 0.2.2-beta
 
 - Tweak schematic visualization

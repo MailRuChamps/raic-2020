@@ -2,7 +2,7 @@ package model
 
 import util.StreamUtil
 
-case class EntityProperties(size: Int, buildScore: Int, destroyScore: Int, canMove: Boolean, populationProvide: Int, populationUse: Int, maxHealth: Int, cost: Int, sightRange: Int, resourcePerHealth: Int, build: Option[model.BuildProperties], attack: Option[model.AttackProperties], repair: Option[model.RepairProperties]) {
+case class EntityProperties(size: Int, buildScore: Int, destroyScore: Int, canMove: Boolean, populationProvide: Int, populationUse: Int, maxHealth: Int, initialCost: Int, sightRange: Int, resourcePerHealth: Int, build: Option[model.BuildProperties], attack: Option[model.AttackProperties], repair: Option[model.RepairProperties]) {
     def writeTo(stream: java.io.OutputStream) {
         StreamUtil.writeInt(stream, size)
         StreamUtil.writeInt(stream, buildScore)
@@ -11,7 +11,7 @@ case class EntityProperties(size: Int, buildScore: Int, destroyScore: Int, canMo
         StreamUtil.writeInt(stream, populationProvide)
         StreamUtil.writeInt(stream, populationUse)
         StreamUtil.writeInt(stream, maxHealth)
-        StreamUtil.writeInt(stream, cost)
+        StreamUtil.writeInt(stream, initialCost)
         StreamUtil.writeInt(stream, sightRange)
         StreamUtil.writeInt(stream, resourcePerHealth)
         build match {

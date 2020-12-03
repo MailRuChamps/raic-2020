@@ -11,14 +11,14 @@ type EntityProperties struct {
     PopulationProvide int32
     PopulationUse int32
     MaxHealth int32
-    Cost int32
+    InitialCost int32
     SightRange int32
     ResourcePerHealth int32
     Build *BuildProperties
     Attack *AttackProperties
     Repair *RepairProperties
 }
-func NewEntityProperties(size int32, buildScore int32, destroyScore int32, canMove bool, populationProvide int32, populationUse int32, maxHealth int32, cost int32, sightRange int32, resourcePerHealth int32, build *BuildProperties, attack *AttackProperties, repair *RepairProperties) EntityProperties {
+func NewEntityProperties(size int32, buildScore int32, destroyScore int32, canMove bool, populationProvide int32, populationUse int32, maxHealth int32, initialCost int32, sightRange int32, resourcePerHealth int32, build *BuildProperties, attack *AttackProperties, repair *RepairProperties) EntityProperties {
     return EntityProperties {
         Size: size,
         BuildScore: buildScore,
@@ -27,7 +27,7 @@ func NewEntityProperties(size int32, buildScore int32, destroyScore int32, canMo
         PopulationProvide: populationProvide,
         PopulationUse: populationUse,
         MaxHealth: maxHealth,
-        Cost: cost,
+        InitialCost: initialCost,
         SightRange: sightRange,
         ResourcePerHealth: resourcePerHealth,
         Build: build,
@@ -44,7 +44,7 @@ func ReadEntityProperties(reader io.Reader) EntityProperties {
     result.PopulationProvide = ReadInt32(reader)
     result.PopulationUse = ReadInt32(reader)
     result.MaxHealth = ReadInt32(reader)
-    result.Cost = ReadInt32(reader)
+    result.InitialCost = ReadInt32(reader)
     result.SightRange = ReadInt32(reader)
     result.ResourcePerHealth = ReadInt32(reader)
     if ReadBool(reader) {
@@ -78,7 +78,7 @@ func (value EntityProperties) Write(writer io.Writer) {
     WriteInt32(writer, value.PopulationProvide)
     WriteInt32(writer, value.PopulationUse)
     WriteInt32(writer, value.MaxHealth)
-    WriteInt32(writer, value.Cost)
+    WriteInt32(writer, value.InitialCost)
     WriteInt32(writer, value.SightRange)
     WriteInt32(writer, value.ResourcePerHealth)
     if value.Build == nil {

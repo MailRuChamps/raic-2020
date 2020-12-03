@@ -9,13 +9,13 @@ class EntityProperties
     attr_accessor :population_provide
     attr_accessor :population_use
     attr_accessor :max_health
-    attr_accessor :cost
+    attr_accessor :initial_cost
     attr_accessor :sight_range
     attr_accessor :resource_per_health
     attr_accessor :build
     attr_accessor :attack
     attr_accessor :repair
-    def initialize(size, build_score, destroy_score, can_move, population_provide, population_use, max_health, cost, sight_range, resource_per_health, build, attack, repair)
+    def initialize(size, build_score, destroy_score, can_move, population_provide, population_use, max_health, initial_cost, sight_range, resource_per_health, build, attack, repair)
         @size = size
         @build_score = build_score
         @destroy_score = destroy_score
@@ -23,7 +23,7 @@ class EntityProperties
         @population_provide = population_provide
         @population_use = population_use
         @max_health = max_health
-        @cost = cost
+        @initial_cost = initial_cost
         @sight_range = sight_range
         @resource_per_health = resource_per_health
         @build = build
@@ -38,7 +38,7 @@ class EntityProperties
         population_provide = stream.read_int()
         population_use = stream.read_int()
         max_health = stream.read_int()
-        cost = stream.read_int()
+        initial_cost = stream.read_int()
         sight_range = stream.read_int()
         resource_per_health = stream.read_int()
         if stream.read_bool()
@@ -56,7 +56,7 @@ class EntityProperties
         else
             repair = nil
         end
-        EntityProperties.new(size, build_score, destroy_score, can_move, population_provide, population_use, max_health, cost, sight_range, resource_per_health, build, attack, repair)
+        EntityProperties.new(size, build_score, destroy_score, can_move, population_provide, population_use, max_health, initial_cost, sight_range, resource_per_health, build, attack, repair)
     end
     def write_to(stream)
         stream.write_int(@size)
@@ -66,7 +66,7 @@ class EntityProperties
         stream.write_int(@population_provide)
         stream.write_int(@population_use)
         stream.write_int(@max_health)
-        stream.write_int(@cost)
+        stream.write_int(@initial_cost)
         stream.write_int(@sight_range)
         stream.write_int(@resource_per_health)
         if @build.nil?

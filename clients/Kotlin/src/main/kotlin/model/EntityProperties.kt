@@ -10,14 +10,14 @@ class EntityProperties {
     var populationProvide: Int = 0
     var populationUse: Int = 0
     var maxHealth: Int = 0
-    var cost: Int = 0
+    var initialCost: Int = 0
     var sightRange: Int = 0
     var resourcePerHealth: Int = 0
     var build: model.BuildProperties? = null
     var attack: model.AttackProperties? = null
     var repair: model.RepairProperties? = null
     constructor() {}
-    constructor(size: Int, buildScore: Int, destroyScore: Int, canMove: Boolean, populationProvide: Int, populationUse: Int, maxHealth: Int, cost: Int, sightRange: Int, resourcePerHealth: Int, build: model.BuildProperties?, attack: model.AttackProperties?, repair: model.RepairProperties?) {
+    constructor(size: Int, buildScore: Int, destroyScore: Int, canMove: Boolean, populationProvide: Int, populationUse: Int, maxHealth: Int, initialCost: Int, sightRange: Int, resourcePerHealth: Int, build: model.BuildProperties?, attack: model.AttackProperties?, repair: model.RepairProperties?) {
         this.size = size
         this.buildScore = buildScore
         this.destroyScore = destroyScore
@@ -25,7 +25,7 @@ class EntityProperties {
         this.populationProvide = populationProvide
         this.populationUse = populationUse
         this.maxHealth = maxHealth
-        this.cost = cost
+        this.initialCost = initialCost
         this.sightRange = sightRange
         this.resourcePerHealth = resourcePerHealth
         this.build = build
@@ -43,7 +43,7 @@ class EntityProperties {
             result.populationProvide = StreamUtil.readInt(stream)
             result.populationUse = StreamUtil.readInt(stream)
             result.maxHealth = StreamUtil.readInt(stream)
-            result.cost = StreamUtil.readInt(stream)
+            result.initialCost = StreamUtil.readInt(stream)
             result.sightRange = StreamUtil.readInt(stream)
             result.resourcePerHealth = StreamUtil.readInt(stream)
             if (StreamUtil.readBoolean(stream)) {
@@ -73,7 +73,7 @@ class EntityProperties {
         StreamUtil.writeInt(stream, populationProvide)
         StreamUtil.writeInt(stream, populationUse)
         StreamUtil.writeInt(stream, maxHealth)
-        StreamUtil.writeInt(stream, cost)
+        StreamUtil.writeInt(stream, initialCost)
         StreamUtil.writeInt(stream, sightRange)
         StreamUtil.writeInt(stream, resourcePerHealth)
         val build = build;

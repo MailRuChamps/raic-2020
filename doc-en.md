@@ -89,7 +89,7 @@ Also, some entities can repair other entities. Only adjacent entities can be rep
 
 Some of the attacking entities can also collect resources from the target. For each health point of damage, a fixed amount of resource (specified in target entity's properties) is added to the attacker's owning player.
 
-Gathered resources can be used to build new entities. Some entity types can do that. New entity's type is limited by capabilities of the builder, listed in its properties. To build a new entity, you have to spend a specified amount of resources. You should also select a location not occupied by other entities, and located not further than build range of the entity performing the building action. Newly built entities have initial health equal either to entity's maximum health, or to a specific value, as specified in builder entity's properties.
+Gathered resources can be used to build new entities. Some entity types can do that. New entity's type is limited by capabilities of the builder, listed in its properties. To build a new entity, you have to spend a specified amount of resources. The exact amount of resources is equal to the value specified in properties of this entity's type, plus current amount of player's entities of this type. You should also select a location not occupied by other entities, and located not further than build range of the entity performing the building action. Newly built entities have initial health equal either to entity's maximum health, or to a specific value, as specified in builder entity's properties.
 
 When an entity is just built, it is inactive at first, meaning it can not perform any actions. To activate an entity, it has to reach its maximum health first. So, if an entity was built not with full health, it needs to be repaired first.
 
@@ -133,10 +133,17 @@ For move action target position needs to be specified. A unit will try to pathfi
 
 When pathfinding is needed to be performed by the game server, a simple A* algorithm is used, with limited number of nodes to be visited.
 
-Each game tick, first a random order is chosen for entities (the order is different each tick).
-Then, all attack actions are performed for active entities in this order.
-Next, build actions are performed in same order (if an entity has performed an attack action this tick, build action will not be performed).
-Then repair actions and move actions are performed in same way. When performing pathfinding for movement, game's state at the beginning of tick is used.
+Each game tick, first pathfinding is being performed for moving entities to determine their potential next position.
+If entity's move action target is adjacent to the entity, no pathfinding is performed, and instead this position is being remembered.
+Next, all attack actions are performed for active entities. If no valid target is found, but the position found in previous step contains an enemy, this enemy is being attacked.
+Next, build actions are performed (if an entity has performed an attack action this tick, build action will not be performed).
+Then repair actions are performed in same way.
+And last, movement is being performed. Movement is performed in steps.
+In each step, entities are trying to move to their next position as determined in the pathfinding stage.
+If several entities are trying to move to the same location, a random one is chosen.
+If no entities can be moved, movement phase is finished.
+
+When performing pathfinding for movement, game's state at the beginning of tick is used.
 In the end, entities with zero health are removed from the game, and entities with full health become active.
 
 ## Round specific rules
@@ -161,7 +168,7 @@ Here you can see the value of entity properties:
         population_provide: 5,
         population_use: 0,
         max_health: 50,
-        cost: 50,
+        initial_cost: 50,
         sight_range: 5,
         resource_per_health: 0,
         build: None,
@@ -176,7 +183,7 @@ Here you can see the value of entity properties:
         population_provide: 0,
         population_use: 1,
         max_health: 10,
-        cost: 30,
+        initial_cost: 30,
         sight_range: 10,
         resource_per_health: 0,
         build: None,
@@ -195,7 +202,7 @@ Here you can see the value of entity properties:
         population_provide: 0,
         population_use: 1,
         max_health: 10,
-        cost: 10,
+        initial_cost: 10,
         sight_range: 10,
         resource_per_health: 0,
         build: Some((
@@ -223,7 +230,7 @@ Here you can see the value of entity properties:
                 RangedBase,
                 Turret,
             ],
-            power: 5,
+            power: 1,
         )),
     ),
     MeleeUnit: (
@@ -234,7 +241,7 @@ Here you can see the value of entity properties:
         population_provide: 0,
         population_use: 1,
         max_health: 50,
-        cost: 20,
+        initial_cost: 20,
         sight_range: 10,
         resource_per_health: 0,
         build: None,
@@ -253,7 +260,7 @@ Here you can see the value of entity properties:
         population_provide: 0,
         population_use: 0,
         max_health: 50,
-        cost: 10,
+        initial_cost: 10,
         sight_range: 2,
         resource_per_health: 0,
         build: None,
@@ -268,7 +275,7 @@ Here you can see the value of entity properties:
         population_provide: 0,
         population_use: 0,
         max_health: 30,
-        cost: 0,
+        initial_cost: 0,
         sight_range: 0,
         resource_per_health: 1,
         build: None,
@@ -283,7 +290,7 @@ Here you can see the value of entity properties:
         population_provide: 0,
         population_use: 0,
         max_health: 100,
-        cost: 200,
+        initial_cost: 200,
         sight_range: 10,
         resource_per_health: 0,
         build: None,
@@ -302,7 +309,7 @@ Here you can see the value of entity properties:
         population_provide: 5,
         population_use: 0,
         max_health: 300,
-        cost: 500,
+        initial_cost: 500,
         sight_range: 5,
         resource_per_health: 0,
         build: Some((
@@ -322,7 +329,7 @@ Here you can see the value of entity properties:
         population_provide: 5,
         population_use: 0,
         max_health: 300,
-        cost: 500,
+        initial_cost: 500,
         sight_range: 5,
         resource_per_health: 0,
         build: Some((
@@ -342,7 +349,7 @@ Here you can see the value of entity properties:
         population_provide: 5,
         population_use: 0,
         max_health: 300,
-        cost: 500,
+        initial_cost: 500,
         sight_range: 5,
         resource_per_health: 0,
         build: Some((
@@ -622,7 +629,7 @@ Fields:
 - `population_provide`: `int32` - Number of population points this entity provides, if active
 - `population_use`: `int32` - Number of population points this entity uses
 - `max_health`: `int32` - Maximum health points
-- `cost`: `int32` - Cost to build this entity type
+- `initial_cost`: `int32` - Cost to build this first entity of this type. Every next one will cost 1 more
 - `sight_range`: `int32` - If fog of war is enabled, maximum distance at which other entities are considered visible
 - `resource_per_health`: `int32` - Amount of resource added to enemy able to collect resource on dealing damage for 1 health point
 - `build`: `Option<BuildProperties>` - Build properties, if entity can build

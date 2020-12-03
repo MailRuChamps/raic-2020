@@ -2,7 +2,7 @@ const BuildProperties = require('./build-properties');
 const AttackProperties = require('./attack-properties');
 const RepairProperties = require('./repair-properties');
 class EntityProperties {
-    constructor(size, buildScore, destroyScore, canMove, populationProvide, populationUse, maxHealth, cost, sightRange, resourcePerHealth, build, attack, repair) {
+    constructor(size, buildScore, destroyScore, canMove, populationProvide, populationUse, maxHealth, initialCost, sightRange, resourcePerHealth, build, attack, repair) {
         this.size = size;
         this.buildScore = buildScore;
         this.destroyScore = destroyScore;
@@ -10,7 +10,7 @@ class EntityProperties {
         this.populationProvide = populationProvide;
         this.populationUse = populationUse;
         this.maxHealth = maxHealth;
-        this.cost = cost;
+        this.initialCost = initialCost;
         this.sightRange = sightRange;
         this.resourcePerHealth = resourcePerHealth;
         this.build = build;
@@ -32,8 +32,8 @@ class EntityProperties {
         populationUse = await stream.readInt();
         let maxHealth;
         maxHealth = await stream.readInt();
-        let cost;
-        cost = await stream.readInt();
+        let initialCost;
+        initialCost = await stream.readInt();
         let sightRange;
         sightRange = await stream.readInt();
         let resourcePerHealth;
@@ -56,7 +56,7 @@ class EntityProperties {
         } else {
             repair = null;
         }
-        return new EntityProperties(size, buildScore, destroyScore, canMove, populationProvide, populationUse, maxHealth, cost, sightRange, resourcePerHealth, build, attack, repair);
+        return new EntityProperties(size, buildScore, destroyScore, canMove, populationProvide, populationUse, maxHealth, initialCost, sightRange, resourcePerHealth, build, attack, repair);
     }
     async writeTo(stream) {
         let size = this.size;
@@ -73,8 +73,8 @@ class EntityProperties {
         await stream.writeInt(populationUse);
         let maxHealth = this.maxHealth;
         await stream.writeInt(maxHealth);
-        let cost = this.cost;
-        await stream.writeInt(cost);
+        let initialCost = this.initialCost;
+        await stream.writeInt(initialCost);
         let sightRange = this.sightRange;
         await stream.writeInt(sightRange);
         let resourcePerHealth = this.resourcePerHealth;

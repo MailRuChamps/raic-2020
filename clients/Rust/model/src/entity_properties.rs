@@ -8,7 +8,7 @@ pub struct EntityProperties {
     pub population_provide: i32,
     pub population_use: i32,
     pub max_health: i32,
-    pub cost: i32,
+    pub initial_cost: i32,
     pub sight_range: i32,
     pub resource_per_health: i32,
     pub build: Option<BuildProperties>,

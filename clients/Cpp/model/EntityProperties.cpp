@@ -1,7 +1,7 @@
 #include "EntityProperties.hpp"
 
 EntityProperties::EntityProperties() { }
-EntityProperties::EntityProperties(int size, int buildScore, int destroyScore, bool canMove, int populationProvide, int populationUse, int maxHealth, int cost, int sightRange, int resourcePerHealth, std::shared_ptr<BuildProperties> build, std::shared_ptr<AttackProperties> attack, std::shared_ptr<RepairProperties> repair) : size(size), buildScore(buildScore), destroyScore(destroyScore), canMove(canMove), populationProvide(populationProvide), populationUse(populationUse), maxHealth(maxHealth), cost(cost), sightRange(sightRange), resourcePerHealth(resourcePerHealth), build(build), attack(attack), repair(repair) { }
+EntityProperties::EntityProperties(int size, int buildScore, int destroyScore, bool canMove, int populationProvide, int populationUse, int maxHealth, int initialCost, int sightRange, int resourcePerHealth, std::shared_ptr<BuildProperties> build, std::shared_ptr<AttackProperties> attack, std::shared_ptr<RepairProperties> repair) : size(size), buildScore(buildScore), destroyScore(destroyScore), canMove(canMove), populationProvide(populationProvide), populationUse(populationUse), maxHealth(maxHealth), initialCost(initialCost), sightRange(sightRange), resourcePerHealth(resourcePerHealth), build(build), attack(attack), repair(repair) { }
 EntityProperties EntityProperties::readFrom(InputStream& stream) {
     EntityProperties result;
     result.size = stream.readInt();
@@ -11,7 +11,7 @@ EntityProperties EntityProperties::readFrom(InputStream& stream) {
     result.populationProvide = stream.readInt();
     result.populationUse = stream.readInt();
     result.maxHealth = stream.readInt();
-    result.cost = stream.readInt();
+    result.initialCost = stream.readInt();
     result.sightRange = stream.readInt();
     result.resourcePerHealth = stream.readInt();
     if (stream.readBool()) {
@@ -42,7 +42,7 @@ void EntityProperties::writeTo(OutputStream& stream) const {
     stream.write(populationProvide);
     stream.write(populationUse);
     stream.write(maxHealth);
-    stream.write(cost);
+    stream.write(initialCost);
     stream.write(sightRange);
     stream.write(resourcePerHealth);
     if (build) {

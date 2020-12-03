@@ -11,13 +11,13 @@ struct EntityProperties {
     int populationProvide;
     int populationUse;
     int maxHealth;
-    int cost;
+    int initialCost;
     int sightRange;
     int resourcePerHealth;
     Nullable!(BuildProperties) build;
     Nullable!(AttackProperties) attack;
     Nullable!(RepairProperties) repair;
-    this(int size, int buildScore, int destroyScore, bool canMove, int populationProvide, int populationUse, int maxHealth, int cost, int sightRange, int resourcePerHealth, Nullable!(BuildProperties) build, Nullable!(AttackProperties) attack, Nullable!(RepairProperties) repair) {
+    this(int size, int buildScore, int destroyScore, bool canMove, int populationProvide, int populationUse, int maxHealth, int initialCost, int sightRange, int resourcePerHealth, Nullable!(BuildProperties) build, Nullable!(AttackProperties) attack, Nullable!(RepairProperties) repair) {
         this.size = size;
         this.buildScore = buildScore;
         this.destroyScore = destroyScore;
@@ -25,7 +25,7 @@ struct EntityProperties {
         this.populationProvide = populationProvide;
         this.populationUse = populationUse;
         this.maxHealth = maxHealth;
-        this.cost = cost;
+        this.initialCost = initialCost;
         this.sightRange = sightRange;
         this.resourcePerHealth = resourcePerHealth;
         this.build = build;
@@ -41,7 +41,7 @@ struct EntityProperties {
         result.populationProvide = reader.readInt();
         result.populationUse = reader.readInt();
         result.maxHealth = reader.readInt();
-        result.cost = reader.readInt();
+        result.initialCost = reader.readInt();
         result.sightRange = reader.readInt();
         result.resourcePerHealth = reader.readInt();
         if (reader.readBool()) {
@@ -69,7 +69,7 @@ struct EntityProperties {
         writer.write(populationProvide);
         writer.write(populationUse);
         writer.write(maxHealth);
-        writer.write(cost);
+        writer.write(initialCost);
         writer.write(sightRange);
         writer.write(resourcePerHealth);
         if (build.isNull()) {
@@ -100,7 +100,7 @@ struct EntityProperties {
             to!string(populationProvide) ~
             to!string(populationUse) ~
             to!string(maxHealth) ~
-            to!string(cost) ~
+            to!string(initialCost) ~
             to!string(sightRange) ~
             to!string(resourcePerHealth) ~
             to!string(build) ~

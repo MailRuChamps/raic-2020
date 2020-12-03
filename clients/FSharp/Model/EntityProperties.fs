@@ -8,7 +8,7 @@ type EntityProperties = {
     PopulationProvide: int;
     PopulationUse: int;
     MaxHealth: int;
-    Cost: int;
+    InitialCost: int;
     SightRange: int;
     ResourcePerHealth: int;
     Build: option<BuildProperties>;
@@ -23,7 +23,7 @@ type EntityProperties = {
         writer.Write this.PopulationProvide
         writer.Write this.PopulationUse
         writer.Write this.MaxHealth
-        writer.Write this.Cost
+        writer.Write this.InitialCost
         writer.Write this.SightRange
         writer.Write this.ResourcePerHealth
         match this.Build with
@@ -49,7 +49,7 @@ type EntityProperties = {
         PopulationProvide = reader.ReadInt32()
         PopulationUse = reader.ReadInt32()
         MaxHealth = reader.ReadInt32()
-        Cost = reader.ReadInt32()
+        InitialCost = reader.ReadInt32()
         SightRange = reader.ReadInt32()
         ResourcePerHealth = reader.ReadInt32()
         Build = match reader.ReadBoolean() with
