@@ -9,4 +9,3 @@ RUN pip install numpy cython sklearn lightgbm catboost numba
 
 COPY . /project
 WORKDIR /project
-

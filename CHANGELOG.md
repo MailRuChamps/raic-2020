@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## 0.4.0-beta
+
+- When playing 1v1 (Finals), when only one player is left, he gets additional score enough to win the game
+- Allow builder units to repair other units
+- Dynamic cost is now only applied to units
+- Reduced cost of turrets
+- Reduced score for destroying a wall
+- Fixed `break_through` not working without attack action
+- Changed Python version to 3.8 and added `numba`
+- Added `rand` & `chrono` to Rust
+- Added quick start examples for Python, C++, C# and Java
+
 ## 0.3.0-beta
 
 - New movement mechanics

@@ -26,7 +26,7 @@ struct Runner {
     writer: Box<dyn std::io::Write>,
 }
 
-struct DebugInterface<'a> {
+pub struct DebugInterface<'a> {
     reader: &'a mut dyn std::io::Read,
     writer: &'a mut dyn std::io::Write,
 }

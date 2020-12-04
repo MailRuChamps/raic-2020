@@ -74,6 +74,7 @@ The "crashed" strategy can no longer control player's behavior. The strategy is 
 The game of CodeCraft 2020 is a strategy where you will have to control a number of units, gather resources, build your settlement and attack your enemies.
 
 Your goal is to gain more score than your opponents. The game ends either when the max tick count has been reached or when there is only one (or zero) players left.
+When playing 1v1 (Finals), when only one player is left, he gets additional score enough to win the game.
 
 The game is played on a rectangular grid, divided into tiles. All game entities have square shape and are located at some integer coordinates. When calculating distance, we count the number of tiles that need to be traversed to reach destination, going to a neighboring tile at one time.
 
@@ -89,7 +90,7 @@ Also, some entities can repair other entities. Only adjacent entities can be rep
 
 Some of the attacking entities can also collect resources from the target. For each health point of damage, a fixed amount of resource (specified in target entity's properties) is added to the attacker's owning player.
 
-Gathered resources can be used to build new entities. Some entity types can do that. New entity's type is limited by capabilities of the builder, listed in its properties. To build a new entity, you have to spend a specified amount of resources. The exact amount of resources is equal to the value specified in properties of this entity's type, plus current amount of player's entities of this type. You should also select a location not occupied by other entities, and located not further than build range of the entity performing the building action. Newly built entities have initial health equal either to entity's maximum health, or to a specific value, as specified in builder entity's properties.
+Gathered resources can be used to build new entities. Some entity types can do that. New entity's type is limited by capabilities of the builder, listed in its properties. To build a new entity, you have to spend a specified amount of resources. For units (movable entities), the exact amount of resources is equal to the value specified in properties of this unit's type, plus current amount of player's units of this type. For other entities, the cost is equal to the initial cost. You should also select a location not occupied by other entities, and located not further than build range of the entity performing the building action. Newly built entities have initial health equal either to entity's maximum health, or to a specific value, as specified in builder entity's properties.
 
 When an entity is just built, it is inactive at first, meaning it can not perform any actions. To activate an entity, it has to reach its maximum health first. So, if an entity was built not with full health, it needs to be repaired first.
 
@@ -225,6 +226,9 @@ Here you can see the value of entity properties:
             valid_targets: [
                 House,
                 Wall,
+                BuilderUnit,
+                MeleeUnit,
+                RangedUnit,
                 BuilderBase,
                 MeleeBase,
                 RangedBase,
@@ -255,7 +259,7 @@ Here you can see the value of entity properties:
     Wall: (
         size: 1,
         build_score: 10,
-        destroy_score: 100,
+        destroy_score: 10,
         can_move: false,
         population_provide: 0,
         population_use: 0,
@@ -290,7 +294,7 @@ Here you can see the value of entity properties:
         population_provide: 0,
         population_use: 0,
         max_health: 100,
-        initial_cost: 200,
+        initial_cost: 50,
         sight_range: 10,
         resource_per_health: 0,
         build: None,
@@ -629,7 +633,7 @@ Fields:
 - `population_provide`: `int32` - Number of population points this entity provides, if active
 - `population_use`: `int32` - Number of population points this entity uses
 - `max_health`: `int32` - Maximum health points
-- `initial_cost`: `int32` - Cost to build this first entity of this type. Every next one will cost 1 more
+- `initial_cost`: `int32` - Cost to build this first entity of this type. If this is a unit (entity can move), the cost is increased by 1 for each existing unit of this type
 - `sight_range`: `int32` - If fog of war is enabled, maximum distance at which other entities are considered visible
 - `resource_per_health`: `int32` - Amount of resource added to enemy able to collect resource on dealing damage for 1 health point
 - `build`: `Option<BuildProperties>` - Build properties, if entity can build
