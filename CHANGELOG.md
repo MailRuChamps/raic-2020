@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.0.0
+
+- Add `pandas` & `torch` to Python
+
 ## 0.4.1-beta
 
 - Changed turret build & destroy score

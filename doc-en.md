@@ -34,16 +34,16 @@ of participation for this player is increased by N basic test intervals. Only th
 
 Games in the **Sandbox** are held according to a set of rules corresponding to the rules of a random stage among the passed ones and the next (current) one. At the same time, the closer the rating value of the two players rating within the **Sandbox**, the more likely that they will be in one game. The **Sandbox** starts before the start of the first stage of the tournament and ends after some time after the final stage (see the schedule
 of stages to clarify the details). In addition, the **Sandbox** is frozen during the stages of the tournament. Following the results of the games in the **Sandbox**
-there is a selection for participation in **Round 1**, which will involve a certain number of participants with the highest rating at the beginning of this stage of the tournament
+there is a selection for participation in **Round 1**, which will involve no more than `1080` participants (if there is less participants, maximal number divisible by `4`) with the highest rating at the beginning of this stage of the tournament
 (if the rating is equal, priority is given to the player who previously sent the latest version of their strategy), as well as an additional selection to
 the next stages of the tournament, including the **Finals**.
 
 **Round 1**, as all further stages, consists of two parts, between which there will be a short break (with the renewal of the **Sandbox** work), which
 allows to improve its strategy. The last strategy sent by the player before the beginning of this part is selected for the games in each part.
 Games are conducted in waves. In each wave, each player participates exactly in one game. The number of waves in each part is determined by
-the capabilities of the testing system. Highest rated participants will proceed to **Round 2**. Also in **Round 2** there will be an additional selection of participants with the highest rating in the **Sandbox** (at the moment of **Round 2** beginning) among those who did not passed according to the results of **Round 1**.
+the capabilities of the testing system. `300` highest rated participants will proceed to **Round 2**. Also in **Round 2** there will be an additional selection of `60` participants with the highest rating in the **Sandbox** (at the moment of **Round 2** beginning) among those who did not passed according to the results of **Round 1**.
 
-According to the results of **Round 2** the best strategies will reach the **Finals**. Also in the **Finals** there will be an additional selection of participants with
+According to the results of **Round 2** the `50` best strategies will reach the **Finals**. Also in the **Finals** there will be an additional selection of `10` participants with
 the highest rating in the **Sandbox** (at the beginning of the **Finals**) from those who did not go through the main tournament.
 
 The system of holding the **Finals** has its own peculiarities. The stage is still
@@ -65,9 +65,9 @@ The "crashed" strategy can no longer control player's behavior. The strategy is 
 
 - The process in which the strategy is started has unexpectedly terminated, or an error has occurred in the protocol of interaction between the strategy and game server.
 
-- The strategy exceeded one of the time constraints assigned to it. There is a time limit for strategy to reply with an action for each tick, as well as a time limit for the whole game.
+- The strategy exceeded one of the time constraints assigned to it. There is a time limit for strategy to reply with an action for each tick - `1` second of real time, as well as a time limit for the whole game - `40` seconds of cpu time.
 
-- The strategy exceeded the memory limit.
+- The strategy exceeded the memory limit - `256` MB.
 
 ## Game overview
 
@@ -76,7 +76,7 @@ The game of CodeCraft 2020 is a strategy where you will have to control a number
 Your goal is to gain more score than your opponents. The game ends either when the max tick count has been reached or when there is only one (or zero) players left.
 When playing 1v1 (Finals), when only one player is left, he gets additional score enough to win the game.
 
-The game is played on a rectangular grid, divided into tiles. All game entities have square shape and are located at some integer coordinates. When calculating distance, we count the number of tiles that need to be traversed to reach destination, going to a neighboring tile at one time.
+The game is played on a rectangular grid, divided into tiles. All game entities have square shape and are located at some integer coordinates. When calculating distance, we count the number of tiles that need to be traversed to reach destination, going to a neighboring tile at one time (Manhattan distance).
 
 Entities' behavior is defined by their properties.
 
@@ -86,11 +86,11 @@ Some entities can move (these entities are called units). Moving entities always
 
 Some entities can attack, and all entities have health and can be destroyed. If entity's health gets below or equal to zero, it is removed from the game. Attacking entities have a limited attacking range, which is a maximum distance to the target for performing the attack. Each tick an entity is attacking, it subtracts a certain amount of health points from the target.
 
-Also, some entities can repair other entities. Only adjacent entities can be repaired. Repairing is restoring a specified amount of health points in on tick. When repairing, target's health can not go above its maximum health, specified in its properties.
+Also, some entities can repair other entities. Only adjacent entities can be repaired. Repairing is restoring a specified amount of health points in on tick. When repairing, target's health can not go above its maximum health, specified in its properties. Only alive entities (with positive health) can be repaired.
 
 Some of the attacking entities can also collect resources from the target. For each health point of damage, a fixed amount of resource (specified in target entity's properties) is added to the attacker's owning player.
 
-Gathered resources can be used to build new entities. Some entity types can do that. New entity's type is limited by capabilities of the builder, listed in its properties. To build a new entity, you have to spend a specified amount of resources. For units (movable entities), the exact amount of resources is equal to the value specified in properties of this unit's type, plus current amount of player's units of this type. For other entities, the cost is equal to the initial cost. You should also select a location not occupied by other entities, and located not further than build range of the entity performing the building action. Newly built entities have initial health equal either to entity's maximum health, or to a specific value, as specified in builder entity's properties.
+Gathered resources can be used to build new entities. Some entity types can do that. New entity's type is limited by capabilities of the builder, listed in its properties. To build a new entity, you have to spend a specified amount of resources. For units (movable entities), the exact amount of resources is equal to the value specified in properties of this unit's type, plus current amount of player's units of this type. For other entities, the cost is equal to the initial cost. You should also select a location not occupied by other entities, and located adjacent to the builder. Newly built entities have initial health equal either to entity's maximum health, or to a specific value, as specified in builder entity's properties.
 
 When an entity is just built, it is inactive at first, meaning it can not perform any actions. To activate an entity, it has to reach its maximum health first. So, if an entity was built not with full health, it needs to be repaired first.
 
@@ -138,7 +138,7 @@ Each game tick, first pathfinding is being performed for moving entities to dete
 If entity's move action target is adjacent to the entity, no pathfinding is performed, and instead this position is being remembered.
 Next, all attack actions are performed for active entities. If no valid target is found, but the position found in previous step contains an enemy, this enemy is being attacked.
 Next, build actions are performed (if an entity has performed an attack action this tick, build action will not be performed).
-Then repair actions are performed in same way.
+Then repair actions are performed in same way. Only entities with positive health are being repaired.
 And last, movement is being performed. Movement is performed in steps.
 In each step, entities are trying to move to their next position as determined in the pathfinding stage.
 If several entities are trying to move to the same location, a random one is chosen.
@@ -154,8 +154,29 @@ In **Round 1** you are to learn the rules of the game. To simplify things, there
 In **Round 2** you have to learn building. In the beginning you will only have builders. You will need to build bases for other types of units. Also, fog of war will now be enabled so you will have to do some exploration before confronting the enemy. The task is further complicated
 that after summarizing the **Round 1**, the part of the weak strategies will be eliminated and you will have to confront stronger opponents.
 
-**Finals** is the most important stage. After the selection, held following the results of the first two stages, the strongest participants will be remained. The games in the finals are going to be 1v1, but otherwise no new rules are going to be introduced.
-## Entity properties values
+**Finals** is the most important stage. After the selection, held following the results of the first two stages, the strongest participants will be remained. The games in the finals are going to be 1v1. Besides that, if there is only one player left in the game, they are given enough score points to win the game.
+
+## Using the app
+
+You have an option to run simple test games locally on your computer. To do so, download the app. Use of the app will allow you to test your strategy in an environment similar to the environment of a testing game on the site, but without any restrictions on the number of games created.
+
+When you start the app, you will see a config screen. You can select strategies participating in the game and configure some game settings. If you want to test your strategy, select TCP player, and then start your strategy. By default port `31001` is used. After successful connection, you will be able to start the game.
+
+If you want to change the port, for example to connect multiple strategies, run your language package specifying host and port. For example, `./aicup2020 localhost 31002`.
+
+After all players have connected, instead of starting new game, you may also start the game using saved game state, or repeat previously saved game. While repeating a game, your strategy will receive data from the server but all the actions will be ignored.
+
+Controls in the app:
+
+- RMB / Shift-LMB - move camera
+- MMB / Ctrl-LMB - rotate camera
+- V - change visualization mode.
+- Ctrl-S - save current game to a file (you can use replay feature)
+- Ctrl-Shift-S - save current game state (you can load game state and start game from it)
+- P - pause/play
+- Left/Right - move time tick by tick (when paused)
+
+You can save the config to a file, and then run the app with `--config <file>` option, bypassing this config screen. Other available options are listed when using `--help` option.## Entity properties values
 
 Here you can see the value of entity properties:
 
