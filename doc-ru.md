@@ -293,8 +293,8 @@
     ),
     Turret: (
         size: 2,
-        build_score: 200,
-        destroy_score: 2000,
+        build_score: 50,
+        destroy_score: 500,
         can_move: false,
         population_provide: 0,
         population_use: 0,
