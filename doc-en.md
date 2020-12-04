@@ -136,7 +136,7 @@ When pathfinding is needed to be performed by the game server, a simple A* algor
 
 Each game tick, first pathfinding is being performed for moving entities to determine their potential next position.
 If entity's move action target is adjacent to the entity, no pathfinding is performed, and instead this position is being remembered.
-Next, all attack actions are performed for active entities. If no valid target is found, but the position found in previous step contains an enemy, this enemy is being attacked.
+Next, all attack actions are performed for active entities in random order. If no valid target is found, but the position found in previous step contains an enemy, this enemy is being attacked. If target's health was positive and becomes zero, target is considered destroyed and score is added to the attacker (but target is not removed from the game just yet).
 Next, build actions are performed (if an entity has performed an attack action this tick, build action will not be performed).
 Then repair actions are performed in same way. Only entities with positive health are being repaired.
 And last, movement is being performed. Movement is performed in steps.
@@ -144,7 +144,6 @@ In each step, entities are trying to move to their next position as determined i
 If several entities are trying to move to the same location, a random one is chosen.
 If no entities can be moved, movement phase is finished.
 
-When performing pathfinding for movement, game's state at the beginning of tick is used.
 In the end, entities with zero health are removed from the game, and entities with full health become active.
 
 ## Round specific rules

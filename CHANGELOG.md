@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.0
+
+- Reintroduce random order of attacking
+
 ## 1.0.0
 
 - Add `pandas` & `torch` to Python
