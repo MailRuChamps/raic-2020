@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.1-beta
+
+- Changed turret build & destroy score
+
 ## 0.4.0-beta
 
 - When playing 1v1 (Finals), when only one player is left, he gets additional score enough to win the game
