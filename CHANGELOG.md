@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.1.1
+
+- Added `pandas` to PyPy
+
 ## 1.1.0
 
 - Reintroduce random order of attacking
