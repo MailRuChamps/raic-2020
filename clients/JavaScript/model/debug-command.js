@@ -8,6 +8,12 @@ class DebugCommand {
         if (tag == Clear.TAG) {
             return await Clear.readFrom(stream);
         }
+        if (tag == SetAutoFlush.TAG) {
+            return await SetAutoFlush.readFrom(stream);
+        }
+        if (tag == Flush.TAG) {
+            return await Flush.readFrom(stream);
+        }
         throw new Error("Unexpected tag value");
     }
 }
@@ -43,4 +49,35 @@ class Clear extends DebugCommand {
 }
 DebugCommand.Clear = Clear;
 Clear.TAG = 1;
+class SetAutoFlush extends DebugCommand {
+    constructor(enable) {
+        super();
+        this.enable = enable;
+    }
+    static async readFrom(stream) {
+        let enable;
+        enable = await stream.readBool();
+        return new SetAutoFlush(enable);
+    }
+    async writeTo(stream) {
+        await stream.writeInt(SetAutoFlush.TAG);
+        let enable = this.enable;
+        await stream.writeBool(enable);
+    }
+}
+DebugCommand.SetAutoFlush = SetAutoFlush;
+SetAutoFlush.TAG = 2;
+class Flush extends DebugCommand {
+    constructor() {
+        super();
+    }
+    static async readFrom(stream) {
+        return new Flush();
+    }
+    async writeTo(stream) {
+        await stream.writeInt(Flush.TAG);
+    }
+}
+DebugCommand.Flush = Flush;
+Flush.TAG = 3;
 module.exports = DebugCommand;

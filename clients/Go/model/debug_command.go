@@ -12,6 +12,10 @@ func ReadDebugCommand(reader io.Reader) DebugCommand {
             return ReadDebugCommandAdd(reader)
         case 1:
             return ReadDebugCommandClear(reader)
+        case 2:
+            return ReadDebugCommandSetAutoFlush(reader)
+        case 3:
+            return ReadDebugCommandFlush(reader)
     }
     panic("Unexpected tag value")
 }
@@ -46,4 +50,36 @@ func ReadDebugCommandClear(reader io.Reader) DebugCommandClear {
 }
 func (value DebugCommandClear) Write(writer io.Writer) {
     WriteInt32(writer, 1)
+}
+
+type DebugCommandSetAutoFlush struct {
+    Enable bool
+}
+func NewDebugCommandSetAutoFlush(enable bool) DebugCommandSetAutoFlush {
+    return DebugCommandSetAutoFlush {
+        Enable: enable,
+    }
+}
+func ReadDebugCommandSetAutoFlush(reader io.Reader) DebugCommandSetAutoFlush {
+    result := DebugCommandSetAutoFlush {}
+    result.Enable = ReadBool(reader)
+    return result
+}
+func (value DebugCommandSetAutoFlush) Write(writer io.Writer) {
+    WriteInt32(writer, 2)
+    WriteBool(writer, value.Enable)
+}
+
+type DebugCommandFlush struct {
+}
+func NewDebugCommandFlush() DebugCommandFlush {
+    return DebugCommandFlush {
+    }
+}
+func ReadDebugCommandFlush(reader io.Reader) DebugCommandFlush {
+    result := DebugCommandFlush {}
+    return result
+}
+func (value DebugCommandFlush) Write(writer io.Writer) {
+    WriteInt32(writer, 3)
 }

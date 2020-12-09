@@ -17,6 +17,8 @@ class DebugCommand {
 public:
     class Add;
     class Clear;
+    class SetAutoFlush;
+    class Flush;
 
     static std::shared_ptr<DebugCommand> readFrom(InputStream& stream);
     virtual void writeTo(OutputStream& stream) const = 0;
@@ -39,6 +41,26 @@ public:
 public:
     Clear();
     static Clear readFrom(InputStream& stream);
+    void writeTo(OutputStream& stream) const override;
+};
+
+class DebugCommand::SetAutoFlush : public DebugCommand {
+public:
+    static const int TAG = 2;
+public:
+    bool enable;
+    SetAutoFlush();
+    SetAutoFlush(bool enable);
+    static SetAutoFlush readFrom(InputStream& stream);
+    void writeTo(OutputStream& stream) const override;
+};
+
+class DebugCommand::Flush : public DebugCommand {
+public:
+    static const int TAG = 3;
+public:
+    Flush();
+    static Flush readFrom(InputStream& stream);
     void writeTo(OutputStream& stream) const override;
 };
 

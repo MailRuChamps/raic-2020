@@ -171,7 +171,7 @@ Controls in the app:
 - MMB / Ctrl-LMB - rotate camera
 - V - change visualization mode.
 - Ctrl-S - save current game to a file (you can use replay feature)
-- Ctrl-Shift-S - save current game state (you can load game state and start game from it)
+- Ctrl-E - save current game state (you can load game state and start game from it)
 - P - pause/play
 - Left/Right - move time tick by tick (when paused)
 
@@ -493,6 +493,15 @@ One of:
 
     - `data`: `DebugData` - Data to add
 - `Clear` - Clear current tick's debug data
+
+    No fields
+
+- `SetAutoFlush` - Enable/disable auto performing of commands
+
+    Fields:
+
+    - `enable`: `boolean` - Enable/disable autoflush
+- `Flush` - Perform all previously sent commands
 
     No fields
 

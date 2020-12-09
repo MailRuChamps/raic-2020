@@ -10,6 +10,10 @@ public abstract class DebugCommand {
                 return Add.readFrom(stream);
             case Clear.TAG:
                 return Clear.readFrom(stream);
+            case SetAutoFlush.TAG:
+                return SetAutoFlush.readFrom(stream);
+            case Flush.TAG:
+                return Flush.readFrom(stream);
             default:
                 throw new java.io.IOException("Unexpected tag value");
         }
@@ -41,6 +45,40 @@ public abstract class DebugCommand {
         public Clear() {}
         public static Clear readFrom(java.io.InputStream stream) throws java.io.IOException {
             Clear result = new Clear();
+            return result;
+        }
+        @Override
+        public void writeTo(java.io.OutputStream stream) throws java.io.IOException {
+            StreamUtil.writeInt(stream, TAG);
+        }
+    }
+
+    public static class SetAutoFlush extends DebugCommand {
+        public static final int TAG = 2;
+        private boolean enable;
+        public boolean isEnable() { return enable; }
+        public void setEnable(boolean enable) { this.enable = enable; }
+        public SetAutoFlush() {}
+        public SetAutoFlush(boolean enable) {
+            this.enable = enable;
+        }
+        public static SetAutoFlush readFrom(java.io.InputStream stream) throws java.io.IOException {
+            SetAutoFlush result = new SetAutoFlush();
+            result.enable = StreamUtil.readBoolean(stream);
+            return result;
+        }
+        @Override
+        public void writeTo(java.io.OutputStream stream) throws java.io.IOException {
+            StreamUtil.writeInt(stream, TAG);
+            StreamUtil.writeBoolean(stream, enable);
+        }
+    }
+
+    public static class Flush extends DebugCommand {
+        public static final int TAG = 3;
+        public Flush() {}
+        public static Flush readFrom(java.io.InputStream stream) throws java.io.IOException {
+            Flush result = new Flush();
             return result;
         }
         @Override

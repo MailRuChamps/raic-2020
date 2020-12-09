@@ -11,6 +11,10 @@ abstract class DebugCommand {
                 return Add.readFrom(reader);
             case Clear.TAG:
                 return Clear.readFrom(reader);
+            case SetAutoFlush.TAG:
+                return SetAutoFlush.readFrom(reader);
+            case Flush.TAG:
+                return Flush.readFrom(reader);
             default:
                 throw new Exception("Unexpected tag value");
         }
@@ -51,6 +55,45 @@ abstract class DebugCommand {
         }
         override string toString() const {
             return "Clear" ~ "(" ~
+                ")";
+        }
+    }
+
+    static class SetAutoFlush : DebugCommand {
+        static const int TAG = 2;
+        bool enable;
+        this() {}
+        this(bool enable) {
+            this.enable = enable;
+        }
+        static SetAutoFlush readFrom(Stream reader) {
+            auto result = new SetAutoFlush();
+            result.enable = reader.readBool();
+            return result;
+        }
+        override void writeTo(Stream writer) const {
+            writer.write(TAG);
+            writer.write(enable);
+        }
+        override string toString() const {
+            return "SetAutoFlush" ~ "(" ~
+                to!string(enable) ~
+                ")";
+        }
+    }
+
+    static class Flush : DebugCommand {
+        static const int TAG = 3;
+        this() {}
+        static Flush readFrom(Stream reader) {
+            auto result = new Flush();
+            return result;
+        }
+        override void writeTo(Stream writer) const {
+            writer.write(TAG);
+        }
+        override string toString() const {
+            return "Flush" ~ "(" ~
                 ")";
         }
     }

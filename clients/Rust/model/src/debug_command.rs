@@ -6,4 +6,9 @@ pub enum DebugCommand {
     },
     Clear {
     },
+    SetAutoFlush {
+        enable: bool,
+    },
+    Flush {
+    },
 }

@@ -6,6 +6,10 @@ class DebugCommand:
             return DebugCommand.Add.read_from(stream)
         if tag == Clear.TAG:
             return DebugCommand.Clear.read_from(stream)
+        if tag == SetAutoFlush.TAG:
+            return DebugCommand.SetAutoFlush.read_from(stream)
+        if tag == Flush.TAG:
+            return DebugCommand.Flush.read_from(stream)
         raise Exception("Unexpected tag value")
 
 from .debug_data import DebugData
@@ -38,3 +42,32 @@ class Clear(DebugCommand):
         return "Clear(" + \
             ")"
 DebugCommand.Clear = Clear
+class SetAutoFlush(DebugCommand):
+    TAG = 2
+    def __init__(self, enable):
+        self.enable = enable
+    @staticmethod
+    def read_from(stream):
+        enable = stream.read_bool()
+        return SetAutoFlush(enable)
+    def write_to(self, stream):
+        stream.write_int(self.TAG)
+        stream.write_bool(self.enable)
+    def __repr__(self):
+        return "SetAutoFlush(" + \
+            repr(self.enable) + \
+            ")"
+DebugCommand.SetAutoFlush = SetAutoFlush
+class Flush(DebugCommand):
+    TAG = 3
+    def __init__(self):
+        pass
+    @staticmethod
+    def read_from(stream):
+        return Flush()
+    def write_to(self, stream):
+        stream.write_int(self.TAG)
+    def __repr__(self):
+        return "Flush(" + \
+            ")"
+DebugCommand.Flush = Flush

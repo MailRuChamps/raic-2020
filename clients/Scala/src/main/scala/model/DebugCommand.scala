@@ -30,10 +30,36 @@ object DebugCommand {
             )
     }
 
+    case class SetAutoFlush(enable: Boolean) extends DebugCommand {
+        override def writeTo(stream: java.io.OutputStream) {
+            StreamUtil.writeInt(stream, SetAutoFlush.TAG)
+            StreamUtil.writeBoolean(stream, enable)
+        }
+    }
+    object SetAutoFlush {
+        val TAG: Int = 2
+        def readFrom(stream: java.io.InputStream): SetAutoFlush = SetAutoFlush(
+            StreamUtil.readBoolean(stream)
+            )
+    }
+
+    case class Flush() extends DebugCommand {
+        override def writeTo(stream: java.io.OutputStream) {
+            StreamUtil.writeInt(stream, Flush.TAG)
+        }
+    }
+    object Flush {
+        val TAG: Int = 3
+        def readFrom(stream: java.io.InputStream): Flush = Flush(
+            )
+    }
+
     def readFrom(stream: java.io.InputStream): DebugCommand = {
         StreamUtil.readInt(stream) match {
             case Add.TAG => Add.readFrom(stream)
             case Clear.TAG => Clear.readFrom(stream)
+            case SetAutoFlush.TAG => SetAutoFlush.readFrom(stream)
+            case Flush.TAG => Flush.readFrom(stream)
             case _ => throw new java.io.IOException("Unexpected tag value")
         }
     }

@@ -8,6 +8,12 @@ class DebugCommand
         if tag == DebugCommand::Clear::TAG
             return DebugCommand::Clear.read_from(stream)
         end
+        if tag == DebugCommand::SetAutoFlush::TAG
+            return DebugCommand::SetAutoFlush.read_from(stream)
+        end
+        if tag == DebugCommand::Flush::TAG
+            return DebugCommand::Flush.read_from(stream)
+        end
         raise "Unexpected tag value"
     end
 
@@ -32,6 +38,32 @@ class DebugCommand
         end
         def self.read_from(stream)
             Clear.new()
+        end
+        def write_to(stream)
+            stream.write_int(TAG)
+        end
+    end
+    class SetAutoFlush
+        TAG = 2
+        attr_accessor :enable
+        def initialize(enable)
+            @enable = enable
+        end
+        def self.read_from(stream)
+            enable = stream.read_bool()
+            SetAutoFlush.new(enable)
+        end
+        def write_to(stream)
+            stream.write_int(TAG)
+            stream.write_bool(@enable)
+        end
+    end
+    class Flush
+        TAG = 3
+        def initialize()
+        end
+        def self.read_from(stream)
+            Flush.new()
         end
         def write_to(stream)
             stream.write_int(TAG)

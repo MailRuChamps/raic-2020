@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## 1.2.0
+
+- Saving/loading game state
+- Fixed randomness with fixed seed
+- Debug interface flushing control for preventing flickering
+- Debug update method now receives game state that is actually currently being rendered
+- Debug data sent during debug update is controlling global debug data storage
+- Added `itertools` to Rust
+- Improved Ruby client performance
+
 ## 1.1.1
 
 - Added `pandas` to PyPy
