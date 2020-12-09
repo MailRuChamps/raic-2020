@@ -1,4 +1,5 @@
 require 'socket'
+require 'stringio'
 require_relative 'stream_wrapper'
 require_relative 'model'
 require_relative 'my_strategy'
@@ -7,23 +8,32 @@ require_relative 'debug_interface'
 class SocketWrapper
     def initialize(socket)
         @socket = socket
+        @read_buffer = StringIO.new('', 'a+b')
+        @write_buffer = ''
     end
+
     def read_bytes(byte_count)
-        result = ''
-        while result.length < byte_count
-            chunk = @socket.recv(byte_count - result.length)
-            if chunk.length <= 0
-                raise "Can't read from socket"
-            end
-            result << chunk
+        @read_buffer = StringIO.new('', 'a+b') unless @read_buffer.is_a? StringIO
+
+        data = @read_buffer.read(byte_count) || ''
+
+        while data.length < byte_count
+            @read_buffer = StringIO.new(@socket.recv(102_400), 'a+b')
+            data << @read_buffer.read(byte_count - data.length)
         end
-        result
+
+        data
     end
+
     def write_bytes(data)
-        @socket.write(data)
+        @write_buffer << data
     end
-    def flush()
-        # TODO
+
+    def flush
+        @socket.write(@write_buffer)
+        @write_buffer = ''
+        @read_buffer = ''
+        @socket.flush
     end
 end
 
