@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 1.2.1
+
+- Fix flickering when using debug interface inside `get_action`
+- Entities in `player_view` are now ordered by id
+
 ## 1.2.0
 
 - Saving/loading game state
