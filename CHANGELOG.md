@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.2
+
+- Show current number of units of each type
+
 ## 1.2.1
 
 - Fix flickering when using debug interface inside `get_action`
