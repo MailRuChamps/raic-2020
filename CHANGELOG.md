@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.2.3
+
+- Show fog of war even then no player is selected
+
 ## 1.2.2
 
 - Show current number of units of each type
