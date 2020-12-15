@@ -10,7 +10,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-         <graalvm.version>20.2.0</graalvm.version>
+        <graalvm.version>20.2.0</graalvm.version>
     </properties>
 
 
@@ -27,7 +27,7 @@
         <finalName>aicup2020</finalName>
 
         <plugins>
-         <plugin>
+            <plugin>
                 <groupId>org.graalvm.nativeimage</groupId>
                 <artifactId>native-image-maven-plugin</artifactId>
                 <version>${graalvm.version}</version>
@@ -43,7 +43,7 @@
                     <skip>false</skip>
                     <imageName>aicup2020-native-with-dependencies</imageName>
                     <buildArgs>
-            --no-fallback
+                        --no-fallback
                     </buildArgs>
                 </configuration>
             </plugin>
