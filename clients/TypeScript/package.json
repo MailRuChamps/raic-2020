@@ -1,0 +1,20 @@
+{
+  "name": "russian-ai-cup.code-craft",
+  "version": "1.0.0",
+  "description": "Соревнование по написанию ИИ для стратегии 2020 года",
+  "scripts": {
+    "build": "npm run clean && npm run compile",
+    "clean": "rm -rf output",
+    "compile": "tsc"
+  },
+  "keywords": [
+    "ai",
+    "ai cup",
+    "russian ai cup"
+  ],
+  "author": "WalkInWay",
+  "devDependencies": {
+    "@types/node": "^14.14.10",
+    "typescript": "3.9.3"
+  }
+}

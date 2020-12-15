@@ -1,0 +1,34 @@
+{
+    "exclude": ["**/*.js"],
+    "compilerOptions": {
+      "allowJs": false,
+      "declaration": false,
+      "module": "commonjs",
+      "outDir": "./output",
+      "rootDir": "./src",
+  
+      "moduleResolution": "node",
+      "target": "es6",
+  
+      "strict": true,
+      "alwaysStrict": true,
+      "strictFunctionTypes": true,
+      "strictNullChecks": true,
+      "strictPropertyInitialization": true,
+  
+      "forceConsistentCasingInFileNames": true,
+      "noImplicitAny": true,
+      "noImplicitReturns": true,
+      "noImplicitThis": true,
+      "noFallthroughCasesInSwitch": true,
+      "noUnusedLocals": true,
+      "noUnusedParameters": true,
+  
+      "downlevelIteration": true,
+      "emitDecoratorMetadata": true,
+      "experimentalDecorators": true,
+      "pretty": true,
+      "preserveConstEnums": true,
+      "removeComments": true
+    }
+  }
