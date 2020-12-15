@@ -6,6 +6,7 @@ edition = "2018"
 [dependencies]
 model = { path = "model", package = "aicup2020-model" }
 trans = "0.4.0-alpha.3"
-rand = "0.7.3"
+rand = { version = "0.7.3", features = ["small_rng"] }
 chrono = "0.4.19"
 itertools = "0.9.0"
+fxhash = "0.2.1"
