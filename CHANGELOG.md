@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 1.3.0
+
+- Server-side pathfinding now consideres cells out of sight range to be empty
+
 ## 1.2.3
 
 - Show fog of war even then no player is selected
